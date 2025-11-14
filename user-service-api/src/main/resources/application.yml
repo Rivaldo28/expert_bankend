@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: user-service-api
+  output:
+    ansi:
+      enabled: Always
+
+  data:
+    mongodb:
+      uri: mongodb+srv://help-desk-user:desk-user@clusterhelpdesk.nudeiet.mongodb.net/helpdeskdb?retryWrites=true&w=majority
+      auto-index-creation: true
+
+  jackson:
+    serialization:
+      indent-output: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.data.mongodb: DEBUG
+    org.mongodb.driver: INFO
