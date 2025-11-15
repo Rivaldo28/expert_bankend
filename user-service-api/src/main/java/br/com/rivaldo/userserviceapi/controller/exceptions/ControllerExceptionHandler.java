@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDateTime;
-
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
