@@ -1,9 +1,9 @@
 package br.com.rivaldo.userserviceapi.service;
 
-import br.com.rivaldo.userserviceapi.entity.User;
+import br.com.rivaldo.models.responses.UserResponse;
+import br.com.rivaldo.userserviceapi.mapper.UserMapper;
 import br.com.rivaldo.userserviceapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public User findById(final String id) {
-        return userRepository.findById(id).orElse(null);
+    public UserResponse findById(final String id) {
+        return userMapper.fromEntity(userRepository.findById(id).orElse(null));
     }
 
 }
