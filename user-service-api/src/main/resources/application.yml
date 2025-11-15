@@ -22,3 +22,9 @@ logging:
     root: INFO
     org.springframework.data.mongodb: DEBUG
     org.mongodb.driver: INFO
+
+springdoc:
+  openapi:
+    title: 'User Service API'
+    description: 'Component responsible for user management created on Formation BackEnd Expert with Digital'
+    version: '1.0.0'

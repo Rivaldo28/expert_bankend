@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Starter para geração de documentação OpenAPI com Springdoc
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
