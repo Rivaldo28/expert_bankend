@@ -1,6 +1,7 @@
 package br.com.rivaldo.userserviceapi.service;
 
 import br.com.rivaldo.models.exceptions.ResourceNotFoundException;
+import br.com.rivaldo.models.requests.CreateUserRequest;
 import br.com.rivaldo.models.responses.UserResponse;
 import br.com.rivaldo.userserviceapi.mapper.UserMapper;
 import br.com.rivaldo.userserviceapi.repository.UserRepository;
@@ -23,4 +24,7 @@ public class UserService {
         );
     }
 
+    public void save(CreateUserRequest createUserRequest) {
+        userRepository.save(userMapper.fromRequest(createUserRequest));
+    }
 }
