@@ -6,6 +6,7 @@ import br.com.rivaldo.models.responses.UserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -52,4 +55,24 @@ public interface UserController {
     ResponseEntity<Void> save(
            @Valid @RequestBody final CreateUserRequest createUserRequest
             );
+
+    @Operation(summary = "Find All users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users found",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            schema = @Schema(
+                                    type = "array",
+                                    implementation = UserResponse.class
+                            )
+                    )),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(
+                            mediaType = APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = StandardError.class)
+                    ))
+    })
+    @GetMapping
+    ResponseEntity<List<UserResponse>> findAll();
+
 }
