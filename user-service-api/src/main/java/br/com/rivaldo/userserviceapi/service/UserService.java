@@ -23,9 +23,7 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
 
     public UserResponse findById(final String id) {
-        return mapper.fromEntity(
-               find(id)
-        );
+        return mapper.fromEntity(find(id));
     }
 
     public void save(CreateUserRequest request) {
