@@ -1,5 +1,6 @@
 package br.com.rivaldo.userserviceapi.service;
 
+import br.com.rivaldo.models.exceptions.ResourceNotFoundException;
 import br.com.rivaldo.models.responses.UserResponse;
 import br.com.rivaldo.userserviceapi.entity.User;
 import br.com.rivaldo.userserviceapi.mapper.UserMapper;
@@ -47,6 +48,19 @@ class UserServiceTest {
 
         verify(repository, times(1)).findById(anyString());
         verify(mapper, times(1)).fromEntity(any(User.class));
+    }
+
+    @Test
+    void whenCallFindByIdWithInvalidThenThrowResourceNotFoundException() {
+        when(repository.findById(anyString())).thenReturn(Optional.empty());
+        try {
+            service.findById("123");
+        } catch (Exception ex) {
+            assertEquals(ResourceNotFoundException.class, ex.getClass());
+            assertEquals("Object not found. Id: 123, Type: UserResponse", ex.getMessage());
+        }
+        verify(repository, times(1)).findById(anyString());
+        verify(mapper, times(0)).fromEntity(any(User.class));
     }
 
 }
