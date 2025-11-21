@@ -38,7 +38,7 @@ public interface UserController {
     })
     @GetMapping("/{id}")
     ResponseEntity<UserResponse> findById(
-            @Parameter(description = "User id", required = true, example = "691885a4654a085d54688c0c")
+            @Parameter(description = "User id", required = true, example = "6920bdb92b02e35273b1c5fb")
             @PathVariable(name = "id") final String id);
 
     @Operation(summary = "Save user")
@@ -92,7 +92,7 @@ public interface UserController {
     })
     @PutMapping("/{id}")
     ResponseEntity<UserResponse> update(
-            @Parameter(description = "User id", required = true, example = "691885a4654a085d54688c0c")
+            @Parameter(description = "User id", required = true, example = "6920bdb92b02e35273b1c5fb")
             @PathVariable(name = "id") final String id,
             @Valid @RequestBody UpdateUserRequest updateUserRequest);
 
