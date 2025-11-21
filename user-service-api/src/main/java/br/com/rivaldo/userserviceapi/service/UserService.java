@@ -2,7 +2,9 @@ package br.com.rivaldo.userserviceapi.service;
 
 import br.com.rivaldo.models.exceptions.ResourceNotFoundException;
 import br.com.rivaldo.models.requests.CreateUserRequest;
+import br.com.rivaldo.models.requests.UpdateUserRequest;
 import br.com.rivaldo.models.responses.UserResponse;
+import br.com.rivaldo.userserviceapi.entity.User;
 import br.com.rivaldo.userserviceapi.mapper.UserMapper;
 import br.com.rivaldo.userserviceapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +22,7 @@ public class UserService {
 
     public UserResponse findById(final String id) {
         return userMapper.fromEntity(
-                userRepository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException(
-                                "Object not found. Id: " + id + ", Type: " + UserResponse.class.getSimpleName()
-                        ))
+               find(id)
         );
     }
 
@@ -46,4 +45,19 @@ public class UserService {
                 .map(userMapper::fromEntity)
                 .toList();
     }
+
+    public UserResponse update(final String id, final UpdateUserRequest updateUserRequest) {
+        User entity = find(id);
+        verifyIfEmailAlreadyExists(updateUserRequest.email(), id);
+//        final var  newEntity = userRepository.save(userMapper.update(updateUserRequest, entity));
+        return userMapper.fromEntity( userRepository.save(userMapper.update(updateUserRequest, entity)));
+    }
+
+    private User find(final String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Object not found. Id: " + id + ", Type: " + UserResponse.class.getSimpleName()
+                ));
+    }
+
 }

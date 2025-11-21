@@ -1,6 +1,7 @@
 package br.com.rivaldo.userserviceapi.controller.impl;
 
 import br.com.rivaldo.models.requests.CreateUserRequest;
+import br.com.rivaldo.models.requests.UpdateUserRequest;
 import br.com.rivaldo.models.responses.UserResponse;
 import br.com.rivaldo.userserviceapi.controller.UserController;
 import br.com.rivaldo.userserviceapi.service.UserService;
@@ -33,6 +34,11 @@ public class UserControllerImpl implements UserController {
     @Override
     public ResponseEntity<List<UserResponse>> findAll() {
         return ResponseEntity.ok().body(userService.findAll());
+    }
+
+    @Override
+    public ResponseEntity<UserResponse> update(final String id, final UpdateUserRequest updateUserRequest) {
+        return ResponseEntity.ok().body(userService.update(id, updateUserRequest));
     }
 
 }

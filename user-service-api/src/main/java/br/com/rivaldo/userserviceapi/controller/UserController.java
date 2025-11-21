@@ -2,11 +2,11 @@ package br.com.rivaldo.userserviceapi.controller;
 
 import br.com.rivaldo.models.exceptions.StandardError;
 import br.com.rivaldo.models.requests.CreateUserRequest;
+import br.com.rivaldo.models.requests.UpdateUserRequest;
 import br.com.rivaldo.models.responses.UserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -74,5 +74,26 @@ public interface UserController {
     })
     @GetMapping
     ResponseEntity<List<UserResponse>> findAll();
+
+    @Operation(summary = "Update User")
+    @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "User updated",
+                        content = @Content(mediaType = APPLICATION_JSON_VALUE,
+                                schema = @Schema(implementation = UserResponse.class))),
+                @ApiResponse(responseCode = "400", description = "Bad Request",
+                         content = @Content(mediaType = APPLICATION_JSON_VALUE,
+                                 schema = @Schema(implementation = StandardError.class))),
+                @ApiResponse(responseCode = "404", description = "User not found",
+                         content = @Content(mediaType = APPLICATION_JSON_VALUE,
+                                 schema = @Schema(implementation = StandardError.class))),
+                @ApiResponse(responseCode = "500", description = "Internal server error",
+                         content = @Content(mediaType = APPLICATION_JSON_VALUE,
+                                 schema = @Schema(implementation = StandardError.class)))
+    })
+    @PutMapping("/{id}")
+    ResponseEntity<UserResponse> update(
+            @Parameter(description = "User id", required = true, example = "691885a4654a085d54688c0c")
+            @PathVariable(name = "id") final String id,
+            @Valid @RequestBody UpdateUserRequest updateUserRequest);
 
 }
