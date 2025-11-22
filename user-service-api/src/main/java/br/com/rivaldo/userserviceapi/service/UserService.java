@@ -18,23 +18,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository repository;
-    private final UserMapper mapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final BCryptPasswordEncoder encoder;
 
     public UserResponse findById(final String id) {
-        return mapper.fromEntity(find(id));
+        return userMapper.fromEntity(find(id));
     }
 
-    public void save(CreateUserRequest request) {
-        verifyIfEmailAlreadyExists(request.email(), null);
-        repository.save(mapper.fromRequest(request)
-                .withPassword(encoder.encode(request.password()))
-        );
+    public void save(CreateUserRequest createUserRequest) {
+        verifyIfEmailAlreadyExists(createUserRequest.email(), null);
+        userRepository.save(userMapper.fromRequest(createUserRequest));
     }
 
     private void verifyIfEmailAlreadyExists(final String email, final String id) {
-        repository.findByEmail(email)
+        userRepository.findByEmail(email)
                 .filter(user -> !user.getId().equals(id))
                 .ifPresent(user -> {
                     throw new DataIntegrityViolationException("Email [" + email + "] already exists");
@@ -42,25 +40,21 @@ public class UserService {
     }
 
     public List<UserResponse> findAll() {
-        return repository.findAll()
+        return userRepository.findAll()
                 .stream()
-                .map(mapper::fromEntity)
+                .map(userMapper::fromEntity)
                 .toList();
     }
 
-    public UserResponse update(final String id, final UpdateUserRequest request) {
+    public UserResponse update(final String id, final UpdateUserRequest updateUserRequest) {
         User entity = find(id);
-        verifyIfEmailAlreadyExists(request.email(), id);
+        verifyIfEmailAlreadyExists(updateUserRequest.email(), id);
 //        final var  newEntity = userRepository.save(userMapper.update(updateUserRequest, entity));
-        return mapper.fromEntity( repository.save(
-                mapper.update(request, entity)
-                        .withPassword(request.password() != null ? encoder.encode(request.password()) : entity.getPassword())
-                )
-        );
+        return userMapper.fromEntity( userRepository.save(userMapper.update(updateUserRequest, entity)));
     }
 
     private User find(final String id) {
-        return repository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Object not found. Id: " + id + ", Type: " + UserResponse.class.getSimpleName()
                 ));
