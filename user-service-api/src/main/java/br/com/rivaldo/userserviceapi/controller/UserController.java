@@ -52,9 +52,7 @@ public interface UserController {
                     ))
     })
     @PostMapping
-    ResponseEntity<Void> save(
-           @Valid @RequestBody final CreateUserRequest createUserRequest
-            );
+    ResponseEntity<Void> save(@Valid @RequestBody final CreateUserRequest createUserRequest);
 
     @Operation(summary = "Find All users")
     @ApiResponses(value = {

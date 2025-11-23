@@ -1,6 +1,7 @@
 package br.com.rivaldo.userserviceapi.service;
 
 import br.com.rivaldo.models.exceptions.ResourceNotFoundException;
+import br.com.rivaldo.models.requests.CreateUserRequest;
 import br.com.rivaldo.models.responses.UserResponse;
 import br.com.rivaldo.userserviceapi.entity.User;
 import br.com.rivaldo.userserviceapi.mapper.UserMapper;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.rivaldo.userserviceapi.creator.CreatorUtils.generateMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +40,7 @@ class UserServiceTest {
     @Test
     void whenCallFindByIdWithValidThenReturnUserResponse() {
         when(repository.findById(anyString())).thenReturn(Optional.of(new User()));
-        when(mapper.fromEntity(any(User.class))).thenReturn(mock(UserResponse.class));
+        when(mapper.fromEntity(any(User.class))).thenReturn(generateMock(UserResponse.class));
 
         final var response = service.findById("123");
 
@@ -75,6 +77,23 @@ void whenCallFindAllThenReturnListOfUserResponse() {
 
         verify(repository, times(1)).findAll();
         verify(mapper, times(2)).fromEntity(any(User.class));
+    }
+
+    @Test
+    void whenCallSaveThenSuccess() {
+        final var request = generateMock(CreateUserRequest.class);
+
+        when(mapper.fromRequest(any())).thenReturn(new User());
+        when(encoder.encode(anyString())).thenReturn("encoded");
+        when(repository.save(any(User.class))).thenReturn(new User());
+        when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        service.save(request);
+
+        verify(mapper).fromRequest(request);
+        verify(encoder).encode(request.password());
+        verify(repository).save(any(User.class));
+        verify(repository).findByEmail(request.email());
     }
 
 }
