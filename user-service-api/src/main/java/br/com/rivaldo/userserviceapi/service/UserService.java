@@ -52,11 +52,13 @@ public class UserService {
                 .toList();
     }
 
-    public UserResponse update(final String id, final UpdateUserRequest updateUserRequest) {
+    public UserResponse update(final String id, final UpdateUserRequest request) {
         User entity = find(id);
-        verifyIfEmailAlreadyExists(updateUserRequest.email(), id);
+        verifyIfEmailAlreadyExists(request.email(), id);
 //        final var  newEntity = userRepository.save(userMapper.update(updateUserRequest, entity));
-        return mapper.fromEntity( repository.save(mapper.update(updateUserRequest, entity)));
+        var user = mapper.fromRequestUpdate(request);
+        var encodedPassword = encoder.encode(request.password());
+        return mapper.fromEntity( repository.save(mapper.update(request, entity)));
     }
 
     private User find(final String id) {
